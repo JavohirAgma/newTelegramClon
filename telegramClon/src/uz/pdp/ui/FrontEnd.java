@@ -21,7 +21,7 @@ public class FrontEnd {
                 }
                 case 2->LoginView.signUp();
                 case 0->{
-                    System.out.println("Bye Bye");
+                    System.out.println("Bye Bye ");
                     return;
                 }
             }
