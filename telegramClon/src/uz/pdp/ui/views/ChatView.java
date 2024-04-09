@@ -56,6 +56,7 @@ public class ChatView {
         }
         Integer index = ScanUtil.intScan("Choose: ");
         User chattingUser = all.get(index);
+        System.out.println(chattingUser);
         boolean b = chatService.create(new Chat(chattingUser.getId(), curUser.getId()));
     }
 
