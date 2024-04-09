@@ -14,7 +14,7 @@ public class FrontEnd {
                 case 1->{
                     curUser = LoginView.logIn();
                     if (curUser!=null){
-                        UserView.profile();
+                        UserView.profile(curUser);
                     }else {
                         System.out.println("Your name or password incorrect❌❌❌");
                     }

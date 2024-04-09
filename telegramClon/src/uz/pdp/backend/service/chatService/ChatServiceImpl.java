@@ -14,7 +14,8 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public boolean create(Chat chat) {
-        return false;
+        boolean add = chatList.add(chat);
+        return add;
     }
 
     @Override
@@ -39,6 +40,12 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public List<Chat> getAll() {
+        List<Chat> existChats = new ArrayList<>();
+        for (Chat chat : chatList) {
+            if (chat!=null){
+                existChats.add(chat);
+            }
+        }
         return null;
     }
 

@@ -42,7 +42,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> getAll() {
-        return null;
+        List<User> existUsers = new ArrayList<>();
+        for (User user : userList) {
+            if (user!=null){
+                existUsers.add(user);
+            }
+        }
+        return existUsers;
     }
 
     @Override
