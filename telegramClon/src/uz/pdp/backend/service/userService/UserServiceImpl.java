@@ -16,8 +16,21 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean create(User user) {
+        boolean b = userExist(user);
+        if (b){
+            return false;
+        }
         boolean add = this.userList.add(user);
         return add;
+    }
+    @Override
+    public boolean userExist(User user) {
+        for (User user1 : userList) {
+            if (user.getPassword().equals(user1.getPassword()) && user.getUsername().equals(user1.getUsername())){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -61,6 +74,8 @@ public class UserServiceImpl implements UserService{
         }
         return null;
     }
+
+
     static UserService userService;
     public static UserService getInstance() {
         if (userService==null){

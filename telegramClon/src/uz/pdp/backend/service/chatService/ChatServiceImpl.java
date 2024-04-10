@@ -49,6 +49,31 @@ public class ChatServiceImpl implements ChatService{
         return null;
     }
 
+    @Override
+    public Chat isExist(String firstUserId, String secondUserId) {
+            for (Chat chat : chatList) {
+                if (chat.getUserFirstId().equals(firstUserId) || chat.getUserFirstId().equals(secondUserId)
+                        && chat.getUserSecondId().equals(firstUserId) || chat.getUserSecondId().equals(secondUserId)
+                ){
+                    return chat;
+                }
+            }
+            return null;
+    }
+
+    @Override
+    public Chat getChat(String fromUserId, String toUserId) {
+        Chat chat = isExist(fromUserId, toUserId);
+        return chat;
+    }
+
+    @Override
+    public void masseging(String text, String userId, String chatId) {
+
+    }
+
+
+
     static ChatService chatService;
     public static ChatService getInstance(){
         if (chatService==null){

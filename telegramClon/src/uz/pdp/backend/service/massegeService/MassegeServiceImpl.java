@@ -14,7 +14,8 @@ public class MassegeServiceImpl implements MassegeService{
 
     @Override
     public boolean create(Massege massege) {
-        return false;
+        boolean add = massegeList.add(massege);
+        return add;
     }
 
     @Override
@@ -41,6 +42,16 @@ public class MassegeServiceImpl implements MassegeService{
     public List<Massege> getAll() {
         return null;
     }
+    @Override
+    public List<Massege> getChatGroupMassege(String chatGroup) {
+        List<Massege> list = new ArrayList<>();
+        for (Massege massege : massegeList) {
+            if (massege.getIdOfChatOrGroup().equals(chatGroup)){
+                list.add(massege);
+            }
+        }
+        return list;
+    }
 
     static MassegeService massegeService;
     public static MassegeService getInstance(){
@@ -49,4 +60,6 @@ public class MassegeServiceImpl implements MassegeService{
         }
         return massegeService;
     }
+
+
 }

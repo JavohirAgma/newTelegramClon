@@ -25,7 +25,7 @@ public class LoginView {
         if (b){
             System.out.println("Create succesfully🎉🎉🎉");
         }else{
-            System.out.println("Someting wrong😑😑😑");
+            System.out.println("You can't create user // username and password is exist");
         }
     }
     public static Integer menu(){
