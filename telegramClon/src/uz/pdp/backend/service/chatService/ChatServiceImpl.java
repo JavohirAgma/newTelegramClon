@@ -20,7 +20,11 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public void delete(String id) {
-
+        for (int i = 0; i < chatList.size(); i++) {
+            if (chatList.get(i)!=null && chatList.get(i).getId().equals(id)){
+                chatList.set(i,null);
+            }
+        }
     }
 
     @Override
@@ -52,8 +56,8 @@ public class ChatServiceImpl implements ChatService{
     @Override
     public Chat isExist(String firstUserId, String secondUserId) {
             for (Chat chat : chatList) {
-                if (chat.getUserFirstId().equals(firstUserId) || chat.getUserFirstId().equals(secondUserId)
-                        && chat.getUserSecondId().equals(firstUserId) || chat.getUserSecondId().equals(secondUserId)
+                if (chat!=null && (chat.getUserFirstId().equals(firstUserId) || chat.getUserFirstId().equals(secondUserId)
+                        && chat.getUserSecondId().equals(firstUserId) || chat.getUserSecondId().equals(secondUserId))
                 ){
                     return chat;
                 }

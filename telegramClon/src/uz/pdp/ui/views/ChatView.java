@@ -9,6 +9,7 @@ import uz.pdp.backend.service.massegeService.MassegeService;
 import uz.pdp.backend.service.massegeService.MassegeServiceImpl;
 import uz.pdp.backend.service.userService.UserService;
 import uz.pdp.backend.service.userService.UserServiceImpl;
+import uz.pdp.ui.FrontEnd;
 import uz.pdp.ui.utils.ScanUtil;
 
 import java.util.Collections;
@@ -28,8 +29,7 @@ public class ChatView {
             switch (menu){
                 case 1->MassegeChats(curUser);
                 case 2->SerchChat();
-                case 3->ShowChats();
-                case 4->DeleteChat();
+                case 3->DeleteChat();
                 case 0-> {
                     return;
                 }
@@ -44,13 +44,7 @@ public class ChatView {
     }
 
     private static User AddChat(User curUser) {
-        int i=1;
-        List<User> all = userService.getAll();
-        for (User user : all) {
-            if (user!=curUser){
-                System.out.println((i++)+ ". " + user.getUsername());
-            }
-        }
+        List<User> all = ShowChats();
         Integer index = ScanUtil.intScan("Choose: ");
         User chattingUser = all.get(index);
         System.out.println(chattingUser);
@@ -63,7 +57,7 @@ public class ChatView {
     public static boolean masseging(User toUser , User curUser){
         forUserName(toUser);
         System.out.println("Write 0=> for exit");
-        Chat chat = chatService.getChat(curUser.getId(), toUser.getId());
+        Chat chat = chatService.isExist(curUser.getId(), toUser.getId());
         List<Massege> chatGroupMassege = massegeService.getChatGroupMassege(chat.getId());
         if (!chatGroupMassege.isEmpty()){
             String userId = chatGroupMassege.get(0).getUserId();
@@ -87,15 +81,37 @@ public class ChatView {
     }
 
     private static void DeleteChat() {
-
+        List<User> all = ShowChats();
+        Integer index = ScanUtil.intScan("Choose: ");
+        User chattingUser = all.get(index);
+        Chat chat = chatService.getChat(FrontEnd.curUser.getId(),chattingUser.getId());
+        chatService.delete(chat.getId());
+        System.out.println("Deleted🎉🎉🎉");
     }
 
-    private static void ShowChats() {
-
+    private static List<User> ShowChats() {
+        int i=1;
+        List<User> all = userService.getAll();
+        for (User user : all) {
+            if (user!= FrontEnd.curUser){
+                System.out.println((i++)+ ". " + user.getUsername());
+            }
+        }
+        return all;
     }
 
     private static void SerchChat() {
-
+        String username = ScanUtil.strScan("Enter username: ");
+        List<User> all = userService.getAll();
+        for (User user : all) {
+            if (user.getUsername().equals(username)){
+                Integer i = forSearch();
+                switch (i){
+                    case 1->masseging(user,FrontEnd.curUser);
+                    case 2-> ChatView.profile(FrontEnd.curUser);
+                }
+            }
+        }
     }
 
     public static Integer mainMenu(){
@@ -103,8 +119,7 @@ public class ChatView {
                 Chatting Page:
                 1.Messiging Chats
                 2.Search Chat
-                3.Show All Chats  
-                4.Delete Chat
+                3.Delete Chat
                 0.Exit
                 """);
         return ScanUtil.intScan("Choose: ");
@@ -112,5 +127,13 @@ public class ChatView {
 
     public static void forUserName(User masseginUser){
         System.out.println("===================================== "+masseginUser.getUsername()+" =====================================");
+    }
+    public static Integer forSearch(){
+        System.out.println("""
+                Are you want to masseging with his/her?
+                1.Yes
+                2.No
+                """);
+        return ScanUtil.intScan("Choose: ");
     }
 }
