@@ -4,6 +4,9 @@ import uz.pdp.backend.model.user.User;
 import uz.pdp.ui.views.LoginView;
 import uz.pdp.ui.views.UserView;
 
+import java.awt.*;
+import java.sql.ResultSet;
+
 public class FrontEnd {
     public static User curUser;
     public static void main(String[] args) {

@@ -17,6 +17,9 @@ public class ChatView {
     static UserService userService = UserServiceImpl.getInstance();
     static ChatService chatService = ChatServiceImpl.getInstance();
     static MassegeService massegeService = MassegeServiceImpl.getInstance();
+    final static String Blue = "\033[34m";
+    final static String Green = "\u001b[32m";
+    final static String Reset = "\033[0m";
     public static void profile(User curUser) {
         System.out.println("Welcome to Chatting Page");
         while (true){
