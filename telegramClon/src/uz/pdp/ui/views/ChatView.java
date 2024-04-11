@@ -11,6 +11,7 @@ import uz.pdp.backend.service.userService.UserService;
 import uz.pdp.backend.service.userService.UserServiceImpl;
 import uz.pdp.ui.utils.ScanUtil;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ChatView {
@@ -60,10 +61,19 @@ public class ChatView {
         return chattingUser;
     }
     public static boolean masseging(User toUser , User curUser){
+        forUserName(toUser);
         System.out.println("Write 0=> for exit");
         Chat chat = chatService.getChat(curUser.getId(), toUser.getId());
-        for (Massege massege : massegeService.getChatGroupMassege(chat.getId())) {
-            System.out.println(massege.getText());
+        List<Massege> chatGroupMassege = massegeService.getChatGroupMassege(chat.getId());
+        if (!chatGroupMassege.isEmpty()){
+            String userId = chatGroupMassege.get(0).getUserId();
+            for (Massege massege : chatGroupMassege) {
+                if (massege.getUserId().equals(userId)){
+                    System.out.println(Blue+massege.getText()+Reset);
+                }else{
+                    System.out.println("                                       "+Green+massege.getText()+Reset);
+                }
+            }
         }
         boolean check=true;
         while (check){
@@ -93,7 +103,7 @@ public class ChatView {
                 Chatting Page:
                 1.Messiging Chats
                 2.Search Chat
-                3.Show All Chats
+                3.Show All Chats  
                 4.Delete Chat
                 0.Exit
                 """);
