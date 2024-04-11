@@ -71,10 +71,6 @@ public class ChatServiceImpl implements ChatService{
         return chat;
     }
 
-    @Override
-    public void masseging(String text, String userId, String chatId) {
-
-    }
 
 
 

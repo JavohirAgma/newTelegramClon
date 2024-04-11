@@ -14,9 +14,9 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public boolean create(Group group) {
-        return false;
+        boolean add = groupList.add(group);
+        return add;
     }
-
     @Override
     public void delete(String id) {
 
@@ -34,12 +34,23 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public Group get(String id) {
+        for (Group group : groupList) {
+            if (group.getId().equals(id)){
+                return group;
+            }
+        }
         return null;
     }
 
     @Override
     public List<Group> getAll() {
-        return null;
+        List<Group> groupList1 = new ArrayList<>();
+        for (Group group : groupList) {
+            if (group!=null){
+                groupList1.add(group);
+            }
+        }
+        return groupList1;
     }
     static GroupService groupService;
     public static GroupService getInstance(){
@@ -48,4 +59,6 @@ public class GroupServiceImpl implements GroupService{
         }
         return groupService;
     }
+
+
 }

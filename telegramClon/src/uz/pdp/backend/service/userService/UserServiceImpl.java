@@ -39,6 +39,18 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public boolean updateWithItems(String id, String name, String username, String password) {
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getId().equals(id)){
+                userList.get(i).setName(name);
+                userList.get(i).setUsername(username);
+                userList.get(i).setPassword(password);
+                return true;
+            }
+        }
+        return false;
+    }
+    @Override
     public void update(User newM) {
 
     }
