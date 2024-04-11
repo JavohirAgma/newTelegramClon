@@ -45,11 +45,20 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void update(User newM, String id) {
-
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getId().equals(id)){
+                userList.set(i,newM);
+            }
+        }
     }
 
     @Override
     public User get(String id) {
+        for (User user : userList) {
+            if (user.getId().equals(id)){
+                return user;
+            }
+        }
         return null;
     }
 

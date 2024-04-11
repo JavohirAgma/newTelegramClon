@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 public class FrontEnd {
     public static User curUser;
     public static void main(String[] args) {
-        System.out.println("WELCOME TELEGRAM");
         while (true){
             Integer menu = LoginView.menu();
             switch (menu){
