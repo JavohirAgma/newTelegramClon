@@ -12,9 +12,8 @@ public interface UserService extends BaseService<User> {
     User login(LoginDTO login);
     boolean userExist(User user);
     boolean updateWithItems(String id ,String name,String username,String password);
-    List<User> addestUsers(ChatGroup mygroups);
     List<User> returnUser(List<ChatGroup> list);
     List<User> returnAll(List<ChatGroup> list);
     List<ChatGroup> returnForRole(List<ChatGroup> list);
-
+    List<ChatGroup> notExistUsers(List<ChatGroup> list);
 }

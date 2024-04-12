@@ -183,6 +183,7 @@ public class GroupView {
     }
 
     private static void  addUser(List<ChatGroup> myGroups) {
+
         List<Group> groupLists = groupService.getListById(myGroups);
         System.out.println("Groups: ");
         for (int i = 0; i < groupLists.size(); i++) {
@@ -191,7 +192,9 @@ public class GroupView {
         }
         Integer index = ScanUtil.intScan("Choose Group: ");
         index--;
-        List<User> users = userService.addestUsers(myGroups.get(index));
+        List<ChatGroup> chatGroups = chatGroupService.notJoinedUser(myGroups.get(index));
+//        List<ChatGroup> chatGroups1 = userService.notExistUsers(chatGroups);
+        List<User> users = userService.returnAll(chatGroups);
         if (users.isEmpty()){
             System.out.println("Qoshadigan Users not");
             return;

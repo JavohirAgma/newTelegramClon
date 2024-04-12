@@ -89,6 +89,17 @@ public class ChatGroupServiceImpl implements ChatGroupService{
         return false;
     }
 
+    @Override
+    public List<ChatGroup> notJoinedUser(ChatGroup group) {
+        List<ChatGroup> list = new ArrayList<>();
+        for (ChatGroup chatGroup : chatGroupList) {
+            if (!chatGroup.getGroupId().equals(group.getGroupId())){
+                list.add(chatGroup);
+            }
+        }
+        return list;
+    }
+
     static ChatGroupService chatGroupService;
     public static ChatGroupService getInstance(){
         if (chatGroupService==null){

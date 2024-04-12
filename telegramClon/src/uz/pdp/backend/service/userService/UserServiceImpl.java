@@ -54,17 +54,6 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> addestUsers(ChatGroup mygroups) {
-        List<User> users = new ArrayList<>();
-        for (User user : userList) {
-            if (!user.getId().equals(mygroups.getUserID())){
-                users.add(user);
-            }
-        }
-        return users;
-    }
-
-    @Override
     public List<User> returnUser(List<ChatGroup> list) {
         List<User> users = new ArrayList<>();
         for (User user : userList) {
@@ -101,6 +90,23 @@ public class UserServiceImpl implements UserService{
             }
         }
         return users;
+    }
+
+    @Override
+    public List<ChatGroup> notExistUsers(List<ChatGroup> list) {
+        List<ChatGroup> list1 = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            int res=0;
+            for (int i1 = 0; i1 < list.size(); i1++) {
+                if (list.get(i).getId().equals(list.get(i1).getId())){
+                    res++;
+                }
+            }
+            if (res==1){
+                list1.add(list.get(i));
+            }
+        }
+        return list1;
     }
 
 
