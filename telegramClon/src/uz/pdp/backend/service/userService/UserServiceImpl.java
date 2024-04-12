@@ -1,6 +1,8 @@
 package uz.pdp.backend.service.userService;
 
 import uz.pdp.backend.dto.LoginDTO;
+import uz.pdp.backend.enums.UserRole;
+import uz.pdp.backend.model.chatGroup.ChatGroup;
 import uz.pdp.backend.model.user.User;
 
 import java.util.ArrayList;
@@ -50,6 +52,58 @@ public class UserServiceImpl implements UserService{
         }
         return false;
     }
+
+    @Override
+    public List<User> addestUsers(ChatGroup mygroups) {
+        List<User> users = new ArrayList<>();
+        for (User user : userList) {
+            if (!user.getId().equals(mygroups.getUserID())){
+                users.add(user);
+            }
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> returnUser(List<ChatGroup> list) {
+        List<User> users = new ArrayList<>();
+        for (User user : userList) {
+            for (ChatGroup chatGroup : list) {
+                if (user.getId().equals(chatGroup.getUserID()) && chatGroup.getRole().equals(UserRole.USER)){
+                    users.add(user);
+                }
+            }
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> returnAll(List<ChatGroup> list) {
+        List<User> users = new ArrayList<>();
+        for (User user : userList) {
+            for (ChatGroup chatGroup : list) {
+                if (user.getId().equals(chatGroup.getUserID())){
+                    users.add(user);
+                }
+            }
+        }
+        return users;
+    }
+
+    @Override
+    public List<ChatGroup> returnForRole(List<ChatGroup> list) {
+        List<ChatGroup> users = new ArrayList<>();
+        for (User user : userList) {
+            for (ChatGroup chatGroup : list) {
+                if (user.getId().equals(chatGroup.getUserID())){
+                    users.add(chatGroup);
+                }
+            }
+        }
+        return users;
+    }
+
+
     @Override
     public void update(User newM) {
 

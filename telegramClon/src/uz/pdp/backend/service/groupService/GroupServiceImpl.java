@@ -1,5 +1,6 @@
 package uz.pdp.backend.service.groupService;
 
+import uz.pdp.backend.model.chatGroup.ChatGroup;
 import uz.pdp.backend.model.group.Group;
 
 import java.util.ArrayList;
@@ -41,6 +42,42 @@ public class GroupServiceImpl implements GroupService{
         }
         return null;
     }
+    @Override
+    public List<Group> getListById(List<ChatGroup> groupList) {
+        List<Group> listOfGroup  = new ArrayList<>();
+        for (ChatGroup chatGroup : groupList) {
+            Group group = get(chatGroup.getGroupId());
+            listOfGroup.add(group);
+        }
+        return listOfGroup;
+    }
+
+    @Override
+    public List<Group> getListINotExist(List<ChatGroup> chatGroup) {
+        List<Group> list = new ArrayList<>();
+        for (int i = 0; i < groupList.size(); i++) {
+            int res=0;
+            for (int j = 0; j < chatGroup.size(); j++) {
+                if (!groupList.get(i).getId().equals(chatGroup.get(j).getGroupId())){
+                    res++;
+                }
+            }
+            if (res==chatGroup.size()){
+                list.add(groupList.get(i));
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public Group returningGroup(ChatGroup chatGroup) {
+        for (Group group : groupList) {
+            if (group.getId().equals(chatGroup.getGroupId())){
+                return group;
+            }
+        }
+        return null;
+    }
 
     @Override
     public List<Group> getAll() {
@@ -59,6 +96,7 @@ public class GroupServiceImpl implements GroupService{
         }
         return groupService;
     }
+
 
 
 }

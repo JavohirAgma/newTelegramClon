@@ -46,20 +46,47 @@ public class ChatGroupServiceImpl implements ChatGroupService{
         return null;
     }
     @Override
-    public List<ChatGroup> getGroupList(String userId,Group group) {
+    public List<ChatGroup> getGroupList(String userId) {
         List<ChatGroup> chatGroups = new ArrayList<>();
         for (ChatGroup chatGroup : chatGroupList) {
             if (chatGroup.getUserID().equals(userId)){
-                if (chatGroup.getRole().equals(UserRole.ADMIN)
-                        || (chatGroup.getRole().equals(UserRole.USER) && group.getRole().equals(GroupRole.PUBLIC))
-                ){
-                    chatGroups.add(chatGroup);
-                }else {
-
-                }
+                chatGroups.add(chatGroup);
             }
         }
         return chatGroups;
+    }
+
+    @Override
+    public List<ChatGroup> getUsersList(String groupId) {
+        List<ChatGroup> chatGroups = new ArrayList<>();
+        for (ChatGroup chatGroup : chatGroupList) {
+            if (chatGroup.getGroupId().equals(groupId)){
+                chatGroups.add(chatGroup);
+            }
+        }
+        return chatGroups;
+    }
+
+    @Override
+    public Integer showHowUsersHave(Group group) {
+        int res=0;
+        for (ChatGroup chatGroup : chatGroupList) {
+            if (chatGroup.getGroupId().equals(group.getId())){
+                res++;
+            }
+        }
+        return res;
+    }
+
+    @Override
+    public boolean userToAdmin(String id) {
+        for (ChatGroup chatGroup : chatGroupList) {
+            if (chatGroup.getUserID().equals(id)){
+                chatGroup.setRole(UserRole.ADMIN);
+                return true;
+            }
+        }
+        return false;
     }
 
     static ChatGroupService chatGroupService;

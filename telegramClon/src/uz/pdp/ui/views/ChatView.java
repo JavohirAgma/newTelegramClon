@@ -12,7 +12,6 @@ import uz.pdp.backend.service.userService.UserServiceImpl;
 import uz.pdp.ui.FrontEnd;
 import uz.pdp.ui.utils.ScanUtil;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ChatView {
@@ -27,9 +26,9 @@ public class ChatView {
         while (true){
             Integer menu = mainMenu();
             switch (menu){
-                case 1->MassegeChats(curUser);
-                case 2->SerchChat();
-                case 3->DeleteChat();
+                case 1-> massegeChats(curUser);
+                case 2-> serchChat();
+                case 3-> deleteChat();
                 case 0-> {
                     return;
                 }
@@ -38,13 +37,38 @@ public class ChatView {
     }
 
 
-    private static void MassegeChats(User curUser) {
-        User toUser = AddChat(curUser);
+    private static void massegeChats(User curUser) {
+        User toUser = addChat(curUser);
         masseging(toUser,curUser);
     }
 
-    private static User AddChat(User curUser) {
-        List<User> all = ShowChats();
+    private static void serchChat() {
+        String username = ScanUtil.strScan("Enter username: ");
+        List<User> all = userService.getAll();
+        for (User user : all) {
+            if (user.getUsername().equals(username)){
+                Integer i = forSearch();
+                switch (i){
+                    case 1->masseging(user,FrontEnd.curUser);
+                    case 2-> ChatView.profile(FrontEnd.curUser);
+                }
+            }
+        }
+    }
+
+    private static void deleteChat() {
+        List<User> all = showChats();
+        Integer index = ScanUtil.intScan("Choose: ");
+        User chattingUser = all.get(index);
+        Chat chat = chatService.getChat(FrontEnd.curUser.getId(),chattingUser.getId());
+        chatService.delete(chat.getId());
+        System.out.println("Deleted🎉🎉🎉");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////// Asosiy methodlar tepada pasdagilar yordamchi va kerakli
+
+    private static User addChat(User curUser) {
+        List<User> all = showChats();
         Integer index = ScanUtil.intScan("Choose: ");
         User chattingUser = all.get(index);
         System.out.println(chattingUser);
@@ -60,9 +84,8 @@ public class ChatView {
         Chat chat = chatService.isExist(curUser.getId(), toUser.getId());
         List<Massege> chatGroupMassege = massegeService.getChatGroupMassege(chat.getId());
         if (!chatGroupMassege.isEmpty()){
-            String userId = chatGroupMassege.get(0).getUserId();
             for (Massege massege : chatGroupMassege) {
-                if (massege.getUserId().equals(userId)){
+                if (!massege.getUserId().equals(FrontEnd.curUser.getId())){
                     System.out.println(Blue+massege.getText()+Reset);
                 }else{
                     System.out.println("                                       "+Green+massege.getText()+Reset);
@@ -71,25 +94,14 @@ public class ChatView {
         }
         boolean check=true;
         while (check){
-            String massege = curUser.getUsername()+": ";
             String s = ScanUtil.strScan(curUser.getUsername()+": ");
-            massege+=s;
             if (s.equals("0")) return true;
-            massegeService.create(new Massege(chat.getId(), curUser.getId(), massege));
+            massegeService.create(new Massege(chat.getId(), curUser.getId(), s));
         }
         return true;
     }
 
-    private static void DeleteChat() {
-        List<User> all = ShowChats();
-        Integer index = ScanUtil.intScan("Choose: ");
-        User chattingUser = all.get(index);
-        Chat chat = chatService.getChat(FrontEnd.curUser.getId(),chattingUser.getId());
-        chatService.delete(chat.getId());
-        System.out.println("Deleted🎉🎉🎉");
-    }
-
-    private static List<User> ShowChats() {
+    private static List<User> showChats() {
         int i=1;
         List<User> all = userService.getAll();
         for (User user : all) {
@@ -100,19 +112,7 @@ public class ChatView {
         return all;
     }
 
-    private static void SerchChat() {
-        String username = ScanUtil.strScan("Enter username: ");
-        List<User> all = userService.getAll();
-        for (User user : all) {
-            if (user.getUsername().equals(username)){
-                Integer i = forSearch();
-                switch (i){
-                    case 1->masseging(user,FrontEnd.curUser);
-                    case 2-> ChatView.profile(FrontEnd.curUser);
-                }
-            }
-        }
-    }
+
 
     public static Integer mainMenu(){
         System.out.println("""
