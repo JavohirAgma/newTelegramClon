@@ -90,6 +90,7 @@ public class GroupView {
                     joiningGroup(s);
                 }
             }
+            again();
         }else{
             for (Group group : groupLists) {
                 System.out.println(group.getName()+"      // I am exist in this groups");
@@ -148,7 +149,7 @@ public class GroupView {
             Integer i = chatGroupService.showHowUsersHave(group);
             System.out.println(++index + ". " + group.getName() + "("+i+")");
         }
-        System.out.println();
+        again();
         Integer i = menuForAdmin();
         switch (i){
              case 1-> showGroupMembers(myGroups);
@@ -178,6 +179,7 @@ public class GroupView {
             System.out.println("Someting wrong😑😑😑");
         }
         chatGroupService.create(new ChatGroup(FrontEnd.curUser.getId(),group.getId(), UserRole.ADMIN));
+        again();
     }
 
 
@@ -200,6 +202,7 @@ public class GroupView {
         for (int i = 0; i < users1.size(); i++) {
             System.out.println((i+1) + ". " + users1.get(i).getUsername()+" //"+chatGroups.get(i).getRole());
         }
+        again();
     }
 
         private static void addUser(List<ChatGroup> myGroups) {
@@ -220,23 +223,25 @@ public class GroupView {
         for (int i = 0; i < users.size(); i++) {
                 System.out.println(i+1 + ". " + users.get(i).getUsername());
         }
-            Integer indexUser = ScanUtil.intScan("Choose User: ");
-            indexUser--;
-            User user = users.get(indexUser);
-            if (myGroups.get(index).getUserID().equals(user.getId())){
-                System.out.println("This user has in this group");
-                return;
-            }
-            String roleOfuser = UserRole.show();
-            System.out.println(roleOfuser);
-            Integer ordinal = ScanUtil.intScan("Choose category: ");
-            UserRole category = UserRole.getCategoryByOrdinal(ordinal);
-            boolean b = chatGroupService.create(new ChatGroup(user.getId(), myGroups.get(index).getGroupId(), category));
-            if (b){
-                System.out.println("Added succesfully🎉🎉🎉");
-            }else{
-                System.out.println("Someting wrong😑😑😑");
-            }
+        Integer indexUser = ScanUtil.intScan("Choose User: ");
+        indexUser--;
+        User user = users.get(indexUser);
+        if (myGroups.get(index).getUserID().equals(user.getId())){
+            System.out.println("This user has in this group");
+            again();
+            return;
+        }
+        String roleOfuser = UserRole.show();
+        System.out.println(roleOfuser);
+        Integer ordinal = ScanUtil.intScan("Choose category: ");
+        UserRole category = UserRole.getCategoryByOrdinal(ordinal);
+        boolean b = chatGroupService.create(new ChatGroup(user.getId(), myGroups.get(index).getGroupId(), category));
+        if (b){
+            System.out.println("Added succesfully🎉🎉🎉");
+        }else{
+            System.out.println("Someting wrong😑😑😑");
+        }
+        again();
     }
     private static void userToAdmin(List<ChatGroup> myGroups) {
         List<Group> groupLists = groupService.getListById(myGroups);
@@ -263,6 +268,7 @@ public class GroupView {
         }else{
             System.out.println("Someting wrong😑😑😑");
         }
+        again();
     }
     private static void deleteGroup(List<ChatGroup> myGroups) {
         List<Group> groupLists = groupService.getListById(myGroups);
@@ -276,6 +282,7 @@ public class GroupView {
         chatGroupService.deleteChatGroupForGroup(groupLists.get(index).getId());
         groupService.delete(groupLists.get(index).getId());
         System.out.println("Deletd successfully");
+        again();
     }
 
     private static void editGroup(List<ChatGroup> myGroups) {
@@ -295,6 +302,7 @@ public class GroupView {
         GroupRole category = GroupRole.getCategoryByOrdinal(ordinal);
         groupService.update(group.getId(),name,category);
         System.out.println("Udated successfully");
+        again();
     }
 
     private static void removeUser(List<ChatGroup> myGroups) {
@@ -322,7 +330,7 @@ public class GroupView {
         i--;
         chatGroupService.deleWithGroupUserId(newUser.get(i).getId(),groupLists.get(index).getId());
         System.out.println("Removed successufully");
-        System.out.println();
+        again();
     }
 
 
@@ -353,6 +361,7 @@ public class GroupView {
                 System.out.println("Someting wrong😑😑😑");
             }
         }
+        again();
     }
     private static boolean masseging(List<Group> groupList) {
         int i=0;
@@ -433,5 +442,8 @@ public class GroupView {
     public static void forGrupName(Group group){
         Integer i = chatGroupService.showHowUsersHave(group);
         System.out.println("===================================== "+group.getName()+"("+i+") =====================================");
+    }
+    public static void again(){
+        System.out.println("===========================================================================================");
     }
 }
