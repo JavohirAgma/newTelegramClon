@@ -1,5 +1,6 @@
 package uz.pdp.backend.service.groupService;
 
+import uz.pdp.backend.enums.GroupRole;
 import uz.pdp.backend.model.chatGroup.ChatGroup;
 import uz.pdp.backend.model.group.Group;
 
@@ -20,17 +21,24 @@ public class GroupServiceImpl implements GroupService{
     }
     @Override
     public void delete(String id) {
-
+        for (int i = 0; i < groupList.size(); i++) {
+            if (groupList.get(i)!=null && groupList.get(i).getId().equals(id)){
+                groupList.set(i,null);
+            }
+        }
     }
 
     @Override
     public void update(Group newM) {
-
     }
 
     @Override
     public void update(Group newM, String id) {
-
+        for (int i = 0; i < groupList.size(); i++) {
+            if (groupList.get(i).getId().equals(id)){
+                groupList.set(i,newM);
+            }
+        }
     }
 
     @Override
@@ -70,13 +78,13 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public Group returningGroup(ChatGroup chatGroup) {
-        for (Group group : groupList) {
-            if (group.getId().equals(chatGroup.getGroupId())){
-                return group;
+    public void update(String id, String name, GroupRole role) {
+        for (int i = 0; i < groupList.size(); i++) {
+            if (groupList.get(i).getId().equals(id)){
+                groupList.get(i).setName(name);
+                groupList.get(i).setRole(role);
             }
         }
-        return null;
     }
 
     @Override

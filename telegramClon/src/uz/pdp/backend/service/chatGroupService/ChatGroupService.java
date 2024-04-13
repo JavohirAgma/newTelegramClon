@@ -12,4 +12,8 @@ public interface ChatGroupService extends BaseService<ChatGroup> {
     Integer showHowUsersHave(Group group);
     boolean userToAdmin(String id);
     List<ChatGroup> joinedUser(ChatGroup group);
+    void deleWithGroupUserId(String userId,String groupId);
+
+    List<ChatGroup> getGroupListForMe(String id);
+    void deleteChatGroupForGroup(String id);
 }

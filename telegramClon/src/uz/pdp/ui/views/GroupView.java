@@ -35,11 +35,37 @@ public class GroupView {
                 case 1-> showGroups();
                 case 2-> showMyGroups();
                 case 3-> createGroup();
+                case 4-> leaveGroup();
                 case 0-> {
                     return;
                 }
             }
         }
+    }
+
+    private static void leaveGroup() {
+        List<ChatGroup> chatGroupList = chatGroupService.getGroupList(FrontEnd.curUser.getId());
+        List<ChatGroup> newchatGroupList = new ArrayList<>();
+        for (ChatGroup chatGroup : chatGroupList) {
+            if (!chatGroup.getUserID().equals(FrontEnd.curUser.getId())){
+                newchatGroupList.add(chatGroup);
+            }
+        }
+        if (newchatGroupList.isEmpty()){
+            System.out.println("There is not groups");
+            return;
+        }
+        List<Group> groupLists = groupService.getListById(newchatGroupList);
+        int i=0;
+        System.out.println("Group: ");
+        for (Group group : groupLists) {
+            Integer res = chatGroupService.showHowUsersHave(group);
+            System.out.println(++i +". "+ group.getName()+"("+res+")");
+        }
+        Integer index = ScanUtil.intScan("Choose group");
+        index--;
+        chatGroupService.deleWithGroupUserId(FrontEnd.curUser.getId(),groupLists.get(index).getId());
+        System.out.println("Deleted succesfully");
     }
 
     public static void showGroups(){
@@ -50,7 +76,7 @@ public class GroupView {
             List<Group> all1 = groupService.getAll();
             for (Group group : all1) {
                 if(group.getRole().equals(GroupRole.PUBLIC)){
-                    System.out.println(group.getName()+"    // I am not exist in this groups");
+                    System.out.println(group.getName()+"    // I am not exist in this group");
                 }
             }
             if (all1.isEmpty()){
@@ -80,38 +106,32 @@ public class GroupView {
             }
             if (forTekshitish.isEmpty()){
                 Integer i = chooseMenu();
-                switch (i){//masseging
-                    case 1-> {
-
-                    }
+                switch (i) {//masseging
+                    case 1 -> masseging(groupLists);
                 }
-            }else if (!forTekshitish.isEmpty() && !groupLists.isEmpty()){
-                Integer i = chooseMenu3();
-                switch (i){
-                    case 1-> {
-                        masseging(groupLists);
-                    }
-                    case 2->{
+            }else if(groupLists.isEmpty()){
+                Integer i = chooseMenu2();
+                switch (i) {
+                    case 1 -> {
                         String s = joinGroup(listINotExist);
                         joiningGroup(s);
                     }
                 }
             }else {
-                Integer i = chooseMenu2();
+                Integer i = chooseMenu3();
                 switch (i){
-                    case 1-> {
-                        String s = joinGroup(listINotExist);
+                    case 1->masseging(groupLists);
+                    case 2->{
+                        String s = joinGroup(forTekshitish);
                         joiningGroup(s);
                     }
                 }
             }
         }
-
-
     }
 
     private static void showMyGroups() {
-        List<ChatGroup> chatGroupList = chatGroupService.getGroupList(FrontEnd.curUser.getId());
+        List<ChatGroup> chatGroupList = chatGroupService.getGroupListForMe(FrontEnd.curUser.getId());
         List<ChatGroup> myGroups = new ArrayList<>();
         if (chatGroupList.isEmpty()){
             System.out.println("My owner groups no");
@@ -131,12 +151,12 @@ public class GroupView {
         System.out.println();
         Integer i = menuForAdmin();
         switch (i){
-             case 1->showGroupMembers(myGroups);
+             case 1-> showGroupMembers(myGroups);
              case 2-> addUser(myGroups);
              case 3-> userToAdmin(myGroups);
-             case 4-> removeUser();
-             case 5-> editGroup();
-             case 6-> deleteGroup();
+             case 4-> removeUser(myGroups);
+             case 5-> editGroup(myGroups);
+             case 6-> deleteGroup(myGroups);
              case 0-> {
                 return;
             }
@@ -182,8 +202,7 @@ public class GroupView {
         }
     }
 
-        private static void  addUser(List<ChatGroup> myGroups) {
-
+        private static void addUser(List<ChatGroup> myGroups) {
         List<Group> groupLists = groupService.getListById(myGroups);
         System.out.println("Groups: ");
         for (int i = 0; i < groupLists.size(); i++) {
@@ -200,7 +219,7 @@ public class GroupView {
         }
         for (int i = 0; i < users.size(); i++) {
                 System.out.println(i+1 + ". " + users.get(i).getUsername());
-            }
+        }
             Integer indexUser = ScanUtil.intScan("Choose User: ");
             indexUser--;
             User user = users.get(indexUser);
@@ -240,21 +259,70 @@ public class GroupView {
         indexUser--;
         boolean b = chatGroupService.userToAdmin(users1.get(indexUser).getId());
         if (b){
-            System.out.println("Changed succesfully🎉🎉🎉");
+            System.out.println("Changed successfully🎉🎉🎉");
         }else{
             System.out.println("Someting wrong😑😑😑");
         }
     }
-    private static void deleteGroup() {
-
+    private static void deleteGroup(List<ChatGroup> myGroups) {
+        List<Group> groupLists = groupService.getListById(myGroups);
+        System.out.println("Groups: ");
+        for (int i = 0; i < groupLists.size(); i++) {
+            Integer result = chatGroupService.showHowUsersHave(groupLists.get(i));
+            System.out.println(i+1 + ". " + groupLists.get(i).getName() + "("+result+")");
+        }
+        Integer index = ScanUtil.intScan("Choose Group: ");
+        index--;
+        chatGroupService.deleteChatGroupForGroup(groupLists.get(index).getId());
+        groupService.delete(groupLists.get(index).getId());
+        System.out.println("Deletd successfully");
     }
 
-    private static void editGroup() {
-
+    private static void editGroup(List<ChatGroup> myGroups) {
+        List<Group> groupLists = groupService.getListById(myGroups);
+        System.out.println("Groups: ");
+        for (int i = 0; i < groupLists.size(); i++) {
+            Integer result = chatGroupService.showHowUsersHave(groupLists.get(i));
+            System.out.println(i+1 + ". " + groupLists.get(i).getName() + "("+result+")");
+        }
+        Integer index = ScanUtil.intScan("Choose Group: ");
+        index--;
+        Group group = groupLists.get(index);
+        String name = ScanUtil.strScan("Enter group name: ");
+        String roleOfGroup = GroupRole.show();
+        System.out.println(roleOfGroup);
+        Integer ordinal = ScanUtil.intScan("Choose category: ");
+        GroupRole category = GroupRole.getCategoryByOrdinal(ordinal);
+        groupService.update(group.getId(),name,category);
+        System.out.println("Udated successfully");
     }
 
-    private static void removeUser() {
-
+    private static void removeUser(List<ChatGroup> myGroups) {
+        List<Group> groupLists = groupService.getListById(myGroups);
+        System.out.println("Groups: ");
+        for (int i = 0; i < groupLists.size(); i++) {
+            Integer result = chatGroupService.showHowUsersHave(groupLists.get(i));
+            System.out.println(i+1 + ". " + groupLists.get(i).getName() + "("+result+")");
+        }
+        Integer index = ScanUtil.intScan("Choose Group: ");
+        index--;
+        List<ChatGroup> users = chatGroupService.getUsersList(groupLists.get(index).getId());
+        List<ChatGroup> chatGroups = userService.returnForRole(users);
+        List<User> users1 = userService.returnAll(users);
+        List<User> newUser = new ArrayList<>();
+        for (User user : users1) {
+            if (!user.getId().equals(FrontEnd.curUser.getId())){
+                newUser.add(user);
+            }
+        }
+        for (int i = 0; i < newUser.size(); i++) {
+            System.out.println((i+1) + ". " + newUser.get(i).getUsername()+" //"+chatGroups.get(i).getRole());
+        }
+        Integer i = ScanUtil.intScan("Choose: ");
+        i--;
+        chatGroupService.deleWithGroupUserId(newUser.get(i).getId(),groupLists.get(index).getId());
+        System.out.println("Removed successufully");
+        System.out.println();
     }
 
 
@@ -324,6 +392,7 @@ public class GroupView {
                 1.Show Group
                 2.Show Only my Groups
                 3.Create Group
+                4.Leave Group
                 0.Exit
                 """);
         return ScanUtil.intScan("Choose: ");
@@ -337,7 +406,7 @@ public class GroupView {
     }
     public static Integer chooseMenu2(){
         System.out.println("""
-                1.Join to the groups
+                1.Join to the group
                 0.Back
                 """);
         return ScanUtil.intScan("Choose: ");

@@ -25,6 +25,34 @@ public class ChatGroupServiceImpl implements ChatGroupService{
     public void delete(String id) {
 
     }
+    @Override
+    public void deleWithGroupUserId(String userId, String groupId) {
+        for (int i = 0; i < chatGroupList.size(); i++) {
+            if (chatGroupList.get(i)!=null && chatGroupList.get(i).getUserID().equals(userId) && chatGroupList.get(i).getGroupId().equals(groupId)){
+                chatGroupList.set(i,null);
+            }
+        }
+    }
+
+    @Override
+    public List<ChatGroup> getGroupListForMe(String userId) {
+        List<ChatGroup> chatGroups = new ArrayList<>();
+        for (ChatGroup chatGroup : chatGroupList) {
+            if (chatGroup!=null && chatGroup.getUserID().equals(userId) && chatGroup.getRole().equals(UserRole.ADMIN)){
+                chatGroups.add(chatGroup);
+            }
+        }
+        return chatGroups;
+    }
+
+    @Override
+    public void deleteChatGroupForGroup(String id) {
+        for (int i = 0; i < chatGroupList.size(); i++) {
+            if (chatGroupList.get(i)!=null && chatGroupList.get(i).getGroupId().equals(id)){
+                chatGroupList.set(i,null);
+            }
+        }
+    }
 
     @Override
     public void update(ChatGroup newM) {
@@ -49,7 +77,7 @@ public class ChatGroupServiceImpl implements ChatGroupService{
     public List<ChatGroup> getGroupList(String userId) {
         List<ChatGroup> chatGroups = new ArrayList<>();
         for (ChatGroup chatGroup : chatGroupList) {
-            if (chatGroup.getUserID().equals(userId)){
+            if (chatGroup!=null && chatGroup.getUserID().equals(userId)){
                 chatGroups.add(chatGroup);
             }
         }
@@ -60,7 +88,7 @@ public class ChatGroupServiceImpl implements ChatGroupService{
     public List<ChatGroup> getUsersList(String groupId) {
         List<ChatGroup> chatGroups = new ArrayList<>();
         for (ChatGroup chatGroup : chatGroupList) {
-            if (chatGroup.getGroupId().equals(groupId)){
+            if (chatGroup!=null && chatGroup.getGroupId().equals(groupId)){
                 chatGroups.add(chatGroup);
             }
         }
@@ -71,7 +99,7 @@ public class ChatGroupServiceImpl implements ChatGroupService{
     public Integer showHowUsersHave(Group group) {
         int res=0;
         for (ChatGroup chatGroup : chatGroupList) {
-            if (chatGroup.getGroupId().equals(group.getId())){
+            if (chatGroup!=null && chatGroup.getGroupId().equals(group.getId())){
                 res++;
             }
         }
@@ -81,7 +109,7 @@ public class ChatGroupServiceImpl implements ChatGroupService{
     @Override
     public boolean userToAdmin(String id) {
         for (ChatGroup chatGroup : chatGroupList) {
-            if (chatGroup.getUserID().equals(id)){
+            if (chatGroup!=null && chatGroup.getUserID().equals(id)){
                 chatGroup.setRole(UserRole.ADMIN);
                 return true;
             }
@@ -93,12 +121,14 @@ public class ChatGroupServiceImpl implements ChatGroupService{
     public List<ChatGroup> joinedUser(ChatGroup group) {
         List<ChatGroup> list = new ArrayList<>();
         for (ChatGroup chatGroup : chatGroupList) {
-            if (chatGroup.getGroupId().equals(group.getGroupId()) || chatGroup.getUserID().equals(group.getUserID())){
+            if (chatGroup!=null && chatGroup.getGroupId().equals(group.getGroupId()) || chatGroup.getUserID().equals(group.getUserID())){
                 list.add(chatGroup);
             }
         }
         return list;
     }
+
+
 
     static ChatGroupService chatGroupService;
     public static ChatGroupService getInstance(){
