@@ -15,5 +15,5 @@ public interface UserService extends BaseService<User> {
     List<User> returnUser(List<ChatGroup> list);
     List<User> returnAll(List<ChatGroup> list);
     List<ChatGroup> returnForRole(List<ChatGroup> list);
-    List<ChatGroup> notExistUsers(List<ChatGroup> list);
+    List<User> notExistUsers(List<ChatGroup> list);
 }

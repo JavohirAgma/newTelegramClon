@@ -11,5 +11,5 @@ public interface ChatGroupService extends BaseService<ChatGroup> {
     List<ChatGroup> getUsersList(String groupId);
     Integer showHowUsersHave(Group group);
     boolean userToAdmin(String id);
-    List<ChatGroup> notJoinedUser(ChatGroup group);
+    List<ChatGroup> joinedUser(ChatGroup group);
 }

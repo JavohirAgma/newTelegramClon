@@ -90,10 +90,10 @@ public class ChatGroupServiceImpl implements ChatGroupService{
     }
 
     @Override
-    public List<ChatGroup> notJoinedUser(ChatGroup group) {
+    public List<ChatGroup> joinedUser(ChatGroup group) {
         List<ChatGroup> list = new ArrayList<>();
         for (ChatGroup chatGroup : chatGroupList) {
-            if (!chatGroup.getGroupId().equals(group.getGroupId())){
+            if (chatGroup.getGroupId().equals(group.getGroupId()) || chatGroup.getUserID().equals(group.getUserID())){
                 list.add(chatGroup);
             }
         }

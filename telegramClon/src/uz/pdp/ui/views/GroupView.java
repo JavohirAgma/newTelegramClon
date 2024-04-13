@@ -182,7 +182,7 @@ public class GroupView {
         }
     }
 
-    private static void  addUser(List<ChatGroup> myGroups) {
+        private static void  addUser(List<ChatGroup> myGroups) {
 
         List<Group> groupLists = groupService.getListById(myGroups);
         System.out.println("Groups: ");
@@ -192,34 +192,32 @@ public class GroupView {
         }
         Integer index = ScanUtil.intScan("Choose Group: ");
         index--;
-        List<ChatGroup> chatGroups = chatGroupService.notJoinedUser(myGroups.get(index));
-//        List<ChatGroup> chatGroups1 = userService.notExistUsers(chatGroups);
-        List<User> users = userService.returnAll(chatGroups);
+        List<ChatGroup> chatGroups = chatGroupService.joinedUser(myGroups.get(index));
+        List<User> users = userService.notExistUsers(chatGroups);
         if (users.isEmpty()){
-            System.out.println("Qoshadigan Users not");
-            return;
+                System.out.println("Qoshadigan Users not");
+                return;
         }
-        System.out.println(users.size());
         for (int i = 0; i < users.size(); i++) {
-            System.out.println(i+1 + ". " + users.get(i).getUsername());
-        }
-        Integer indexUser = ScanUtil.intScan("Choose User: ");
-        indexUser--;
-        User user = users.get(indexUser);
-        if (myGroups.get(index).getUserID().equals(user.getId())){
-            System.out.println("This user has in this group");
-            return;
-        }
-        String roleOfuser = UserRole.show();
-        System.out.println(roleOfuser);
-        Integer ordinal = ScanUtil.intScan("Choose category: ");
-        UserRole category = UserRole.getCategoryByOrdinal(ordinal);
-        boolean b = chatGroupService.create(new ChatGroup(user.getId(), myGroups.get(index).getGroupId(), category));
-        if (b){
-            System.out.println("Added succesfully🎉🎉🎉");
-        }else{
-            System.out.println("Someting wrong😑😑😑");
-        }
+                System.out.println(i+1 + ". " + users.get(i).getUsername());
+            }
+            Integer indexUser = ScanUtil.intScan("Choose User: ");
+            indexUser--;
+            User user = users.get(indexUser);
+            if (myGroups.get(index).getUserID().equals(user.getId())){
+                System.out.println("This user has in this group");
+                return;
+            }
+            String roleOfuser = UserRole.show();
+            System.out.println(roleOfuser);
+            Integer ordinal = ScanUtil.intScan("Choose category: ");
+            UserRole category = UserRole.getCategoryByOrdinal(ordinal);
+            boolean b = chatGroupService.create(new ChatGroup(user.getId(), myGroups.get(index).getGroupId(), category));
+            if (b){
+                System.out.println("Added succesfully🎉🎉🎉");
+            }else{
+                System.out.println("Someting wrong😑😑😑");
+            }
     }
     private static void userToAdmin(List<ChatGroup> myGroups) {
         List<Group> groupLists = groupService.getListById(myGroups);
